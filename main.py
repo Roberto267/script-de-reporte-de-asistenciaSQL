@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import pandas as pd
 from datetime import datetime
 import psycopg2
@@ -19,19 +18,19 @@ cur = conn.cursor()
 cur.execute("SELECT COUNT(*) FROM areas")
 if cur.fetchone()[0] == 0:
     cur.execute("INSERT INTO areas (nombre) VALUES ('Área general')")
-    print("🆕 Se creó área por defecto (id=1).")
+    print("Se creó área por defecto (id=1).")
 
 cur.execute("SELECT COUNT(*) FROM carreras")
 if cur.fetchone()[0] == 0:
     cur.execute("INSERT INTO carreras (nombre) VALUES ('Carrera general')")
-    print("🆕 Se creó carrera por defecto (id=1).")
+    print(" Se creó carrera por defecto (id=1).")
 
 conn.commit()
 
 
 #  MES Y AÑO DEL REPORTE
 
-mes = "agosto 2025"  # 🔹 Cambia según el mes que estás procesando
+mes = "agosto 2025"  #  Cambia según el mes que estás procesando
 mes_nombre, mes_anio = mes.split()
 mes_anio = int(mes_anio)
 
@@ -109,7 +108,7 @@ for nombre, df_emp in empleados_datos.items():
 respuesta = input("\n¿Deseas subir todos los datos a PostgreSQL? (s/n): ").strip().lower()
 if respuesta == "s":
     for nombre, total_minutos in todos_empleados.items():
-        # 1️⃣ Buscar el ID del prestador por su nombre
+        # Buscar el ID del prestador por su nombre
         cur.execute("SELECT id_prestador FROM prestadores WHERE nombre = %s", (nombre,))
         prestador = cur.fetchone()
 
@@ -125,7 +124,7 @@ if respuesta == "s":
         else:
             id_prestador = prestador[0]
 
-        # 2️⃣ Verificar si ya existe registro para ese mes y año
+        # Verificar si ya existe registro para ese mes y año
         cur.execute("""
             SELECT COUNT(*) FROM asistencias_mensuales
             WHERE id_prestador = %s AND mes = %s AND año = %s
@@ -133,7 +132,7 @@ if respuesta == "s":
         existe = cur.fetchone()[0] > 0
 
         if existe:
-            print(f"⚠ {nombre} ya tiene registro para {mes_nombre} {mes_anio}, se omite.")
+            print(f" {nombre} ya tiene registro para {mes_nombre} {mes_anio}, se omite.")
         else:
             cur.execute("""
                 INSERT INTO asistencias_mensuales (id_prestador, mes, año, horas_acumuladas)
@@ -146,8 +145,9 @@ if respuesta == "s":
 else:
     print("\n❌ Ningún dato fue subido a la base SQL.")
 
-# ===============================
+
 #  CERRAR CONEXIÓN
-# ===============================
+
 cur.close()
 conn.close()
+
